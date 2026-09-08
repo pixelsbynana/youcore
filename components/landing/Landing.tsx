@@ -24,11 +24,8 @@ export function Landing() {
           edge instead of getting hard-clipped at the narrow column's edge. */}
       <div className="relative mx-auto flex max-w-lg flex-col px-6 sm:max-w-2xl sm:px-10">
         {/* nav */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center">
           <span className="font-serif text-lg tracking-tight text-brown">You Core</span>
-          <span className="rounded-full bg-offwhite px-3 py-1 text-xs font-medium text-brown-soft ring-1 ring-brown/10">
-            v1
-          </span>
         </div>
 
         {/* hero */}
