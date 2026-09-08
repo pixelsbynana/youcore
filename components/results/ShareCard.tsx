@@ -68,36 +68,41 @@ export function ShareCard({ archetype, scores }: { archetype: Archetype; scores:
 
   return (
     <div>
-      <div
-        ref={cardRef}
-        className="mx-auto aspect-[9/16] max-w-[260px] overflow-hidden rounded-[26px] bg-gradient-to-b from-blush to-cream p-6 shadow-[0_24px_50px_-16px_rgba(51,42,39,0.35)] ring-1 ring-brown/10 sm:max-w-[280px]"
-      >
-        <div className="grain flex h-full flex-col">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brown/60">You Core</p>
-          <p className="mt-6 font-serif text-2xl leading-tight text-brown">{archetype.name}</p>
-          <p className="text-3xl">{archetype.emoji}</p>
+      {/* Shadow lives on this outer wrapper, not on the captured node itself —
+          html-to-image mis-measures elements that have their own box-shadow,
+          producing a shifted/cropped export. */}
+      <div className="mx-auto max-w-[260px] shadow-[0_24px_50px_-16px_rgba(51,42,39,0.35)] sm:max-w-[280px]">
+        <div
+          ref={cardRef}
+          className="aspect-[9/16] overflow-hidden rounded-[26px] bg-gradient-to-b from-blush to-cream p-6 ring-1 ring-brown/10"
+        >
+          <div className="grain flex h-full flex-col">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brown/60">You Core</p>
+            <p className="mt-6 font-serif text-2xl leading-tight text-brown">{archetype.name}</p>
+            <p className="text-3xl">{archetype.emoji}</p>
 
-          <div className="mt-6 space-y-3">
-            {top3.map((t) => (
-              <div key={t.id}>
-                <div className="flex justify-between text-[11px] font-medium text-brown/70">
-                  <span>{t.label}</span>
-                  <span>{t.value}%</span>
+            <div className="mt-6 space-y-3">
+              {top3.map((t) => (
+                <div key={t.id}>
+                  <div className="flex justify-between text-[11px] font-medium text-brown/70">
+                    <span>{t.label}</span>
+                    <span>{t.value}%</span>
+                  </div>
+                  <div className="mt-1 h-[5px] w-full rounded-full bg-brown/10">
+                    <div className="h-full rounded-full bg-pink-deep" style={{ width: `${t.value}%` }} />
+                  </div>
                 </div>
-                <div className="mt-1 h-[5px] w-full rounded-full bg-brown/10">
-                  <div className="h-full rounded-full bg-pink-deep" style={{ width: `${t.value}%` }} />
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          <p className="mt-6 flex-1 text-[13px] italic leading-snug text-brown/80">
-            “{archetype.weNoticed(scores)}”
-          </p>
+            <p className="mt-6 flex-1 text-[13px] italic leading-snug text-brown/80">
+              “{archetype.weNoticed(scores)}”
+            </p>
 
-          <div className="mt-4 border-t border-brown/10 pt-3">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-pink-deep">Take the quiz at</p>
-            <p className="text-[11px] font-medium text-brown/70">{SITE_URL}</p>
+            <div className="mt-4 border-t border-brown/10 pt-3">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-pink-deep">Take the quiz at</p>
+              <p className="text-[11px] font-medium text-brown/70">{SITE_URL}</p>
+            </div>
           </div>
         </div>
       </div>
