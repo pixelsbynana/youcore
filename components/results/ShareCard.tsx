@@ -1,53 +1,76 @@
 "use client";
 
-import { useState } from "react";
-import { Share2, Check } from "lucide-react";
+import { useRef, useState } from "react";
+import { Share2, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import type { Archetype } from "@/data/archetypes";
 import type { TraitScores } from "@/data/traits";
 import { rankTraits } from "@/lib/scoring";
 
-export function ShareCard({
-  archetype,
-  scores,
-  shareUrl,
-}: {
-  archetype: Archetype;
-  scores: TraitScores;
-  shareUrl: string;
-}) {
-  const [copied, setCopied] = useState(false);
-  const top3 = rankTraits(scores).slice(0, 3);
+type Status = "idle" | "working" | "done";
 
-  const shareText = `✨ YOU CORE\n\n${archetype.name.toUpperCase()} ${archetype.emoji}\n\n${top3
-    .map((t) => `${t.value}% ${t.label}`)
-    .join("\n")}\n\n"${archetype.weNoticed(scores)}"\n\nFind your You Core →`;
+export function ShareCard({ archetype, scores }: { archetype: Archetype; scores: TraitScores }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  // A ref, not state, so a near-simultaneous second click (e.g. a double-tap,
+  // or a duplicate event from the touch/motion layer) is blocked immediately —
+  // state updates aren't synchronous, so checking `status` alone can't catch
+  // two calls that both start before the first re-render lands.
+  const workingRef = useRef(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const top3 = rankTraits(scores).slice(0, 3);
+  const fileName = `you-core-${archetype.id}.png`;
 
   async function handleShare() {
-    if (typeof navigator !== "undefined" && "share" in navigator) {
-      try {
-        await navigator.share({ title: "You Core", text: shareText, url: shareUrl });
-        return;
-      } catch {
-        // cancelled or unsupported mid-flight — fall back to copy
-      }
-    }
-    handleCopy();
-  }
+    if (!cardRef.current || workingRef.current) return;
+    workingRef.current = true;
+    setStatus("working");
 
-  async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2200);
+      // Rendering the card to an image is only needed once someone actually
+      // asks for it, so it's loaded on demand instead of bundled up front.
+      const { toBlob } = await import("html-to-image");
+      const blob = await toBlob(cardRef.current, { pixelRatio: 4, cacheBust: true });
+      if (!blob) throw new Error("Image generation failed");
+
+      const file = new File([blob], fileName, { type: "image/png" });
+
+      if (typeof navigator !== "undefined" && navigator.canShare?.({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: "You Core",
+            text: `I'm ${archetype.name} ${archetype.emoji} — find your You Core`,
+          });
+          setStatus("done");
+        } catch (shareErr) {
+          if (shareErr instanceof Error && shareErr.name === "AbortError") {
+            // user closed the share sheet without picking anything
+            setStatus("idle");
+            return;
+          }
+          downloadBlob(blob, fileName);
+          setStatus("done");
+        }
+      } else {
+        downloadBlob(blob, fileName);
+        setStatus("done");
+      }
     } catch {
-      // clipboard unavailable — nothing more we can do
+      setStatus("idle");
+      return;
+    } finally {
+      workingRef.current = false;
     }
+
+    setTimeout(() => setStatus("idle"), 2200);
   }
 
   return (
     <div>
-      <div className="mx-auto aspect-[9/16] max-w-[260px] overflow-hidden rounded-[26px] bg-gradient-to-b from-blush to-cream p-6 shadow-[0_24px_50px_-16px_rgba(51,42,39,0.35)] ring-1 ring-brown/10 sm:max-w-[280px]">
+      <div
+        ref={cardRef}
+        className="mx-auto aspect-[9/16] max-w-[260px] overflow-hidden rounded-[26px] bg-gradient-to-b from-blush to-cream p-6 shadow-[0_24px_50px_-16px_rgba(51,42,39,0.35)] ring-1 ring-brown/10 sm:max-w-[280px]"
+      >
         <div className="grain flex h-full flex-col">
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brown/60">You Core</p>
           <p className="mt-6 font-serif text-2xl leading-tight text-brown">{archetype.name}</p>
@@ -78,14 +101,31 @@ export function ShareCard({
         </div>
       </div>
 
-      <p className="mt-3 text-center text-xs text-brown-soft">📸 Screenshot this to post it, or share it directly</p>
+      <p className="mt-3 text-center text-xs text-brown-soft">Save this as an image and post it anywhere ✨</p>
 
       <div className="mt-4 flex justify-center">
-        <Button onClick={handleShare}>
-          {copied ? <Check size={16} strokeWidth={2.5} /> : <Share2 size={16} strokeWidth={2.5} />}
-          {copied ? "Copied!" : "Share my You Core"}
+        <Button onClick={handleShare} disabled={status === "working"}>
+          {status === "working" ? (
+            <Loader2 size={16} strokeWidth={2.5} className="animate-spin" />
+          ) : status === "done" ? (
+            <Check size={16} strokeWidth={2.5} />
+          ) : (
+            <Share2 size={16} strokeWidth={2.5} />
+          )}
+          {status === "working" ? "Preparing…" : status === "done" ? "Saved!" : "Share my You Core"}
         </Button>
       </div>
     </div>
   );
+}
+
+function downloadBlob(blob: Blob, fileName: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

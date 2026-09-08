@@ -35,7 +35,6 @@ export default function ResultsPage() {
   if (!archetype) return <LoadingShell />;
 
   const { scores } = result;
-  const shareUrl = typeof window !== "undefined" ? window.location.origin : "";
 
   return (
     <main className="mx-auto flex min-h-svh max-w-lg flex-col gap-10 overflow-x-clip px-6 pb-20 pt-7 sm:max-w-2xl sm:px-10">
@@ -84,7 +83,7 @@ export default function ResultsPage() {
 
       <div>
         <p className="mb-5 text-center font-serif text-2xl text-brown">Share your You Core</p>
-        <ShareCard archetype={archetype} scores={scores} shareUrl={shareUrl} />
+        <ShareCard archetype={archetype} scores={scores} />
       </div>
 
       <footer className="pt-2 text-center text-xs text-brown-soft/70">
