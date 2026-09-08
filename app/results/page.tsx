@@ -37,58 +37,64 @@ export default function ResultsPage() {
   const { scores } = result;
 
   return (
-    <main className="mx-auto flex min-h-svh max-w-lg flex-col gap-10 overflow-x-clip px-6 pb-20 pt-7 sm:max-w-2xl sm:px-10">
-      <div className="flex items-center justify-between">
-        <Link href="/" className="font-serif text-lg text-brown">
-          You Core
-        </Link>
-        <Link
-          href="/quiz"
-          className="flex items-center gap-1.5 text-sm text-brown-soft transition-colors hover:text-brown"
-        >
-          <RotateCcw size={13} strokeWidth={2.5} />
-          Retake
-        </Link>
+    <main className="relative min-h-svh overflow-x-clip pb-20 pt-7">
+      {/* Content stays column-width via this inner wrapper, but overflow-x-clip
+          lives on the full-bleed <main> above — so the hero blobs (absolute
+          children of ResultHero) can fade out gradually toward the viewport
+          edge instead of getting hard-clipped at the narrow column's edge. */}
+      <div className="relative mx-auto flex max-w-lg flex-col gap-10 px-6 sm:max-w-2xl sm:px-10">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="font-serif text-lg text-brown">
+            You Core
+          </Link>
+          <Link
+            href="/quiz"
+            className="flex items-center gap-1.5 text-sm text-brown-soft transition-colors hover:text-brown"
+          >
+            <RotateCcw size={13} strokeWidth={2.5} />
+            Retake
+          </Link>
+        </div>
+
+        <ResultHero archetype={archetype} scores={scores} />
+
+        <TraitList scores={scores} />
+
+        <div className="flex flex-col gap-4">
+          <InsightCard emoji="👀" title="We noticed…" accent="blush">
+            {archetype.weNoticed(scores)}
+          </InsightCard>
+          <InsightCard emoji="🚩" title="Your toxic trait" accent="pink">
+            {archetype.toxicTrait}
+          </InsightCard>
+          <InsightCard emoji="💚" title="Your green flag" accent="lavender">
+            {archetype.greenFlag}
+          </InsightCard>
+          <InsightCard emoji="🎬" title="Your main-character moment" accent="blush">
+            {archetype.mainCharacterMoment}
+          </InsightCard>
+          <InsightCard emoji="🧠" title="Your brain probably sounds like…" accent="pink">
+            {archetype.brainSoundsLike}
+          </InsightCard>
+          <InsightCard emoji="💘" title="Your ideal person" accent="lavender">
+            {archetype.idealPerson}
+          </InsightCard>
+          <InsightCard emoji="🫶" title="Your ideal friend" accent="blush">
+            {archetype.idealFriend}
+          </InsightCard>
+        </div>
+
+        <ExposeMe text={archetype.exposeMe(scores)} />
+
+        <div>
+          <p className="mb-5 text-center font-serif text-2xl text-brown">Share your You Core</p>
+          <ShareCard archetype={archetype} scores={scores} />
+        </div>
+
+        <footer className="pt-2 text-center text-xs text-brown-soft/70">
+          Not a licensed psychologist. Just very observant.
+        </footer>
       </div>
-
-      <ResultHero archetype={archetype} scores={scores} />
-
-      <TraitList scores={scores} />
-
-      <div className="flex flex-col gap-4">
-        <InsightCard emoji="👀" title="We noticed…" accent="blush">
-          {archetype.weNoticed(scores)}
-        </InsightCard>
-        <InsightCard emoji="🚩" title="Your toxic trait" accent="pink">
-          {archetype.toxicTrait}
-        </InsightCard>
-        <InsightCard emoji="💚" title="Your green flag" accent="lavender">
-          {archetype.greenFlag}
-        </InsightCard>
-        <InsightCard emoji="🎬" title="Your main-character moment" accent="blush">
-          {archetype.mainCharacterMoment}
-        </InsightCard>
-        <InsightCard emoji="🧠" title="Your brain probably sounds like…" accent="pink">
-          {archetype.brainSoundsLike}
-        </InsightCard>
-        <InsightCard emoji="💘" title="Your ideal person" accent="lavender">
-          {archetype.idealPerson}
-        </InsightCard>
-        <InsightCard emoji="🫶" title="Your ideal friend" accent="blush">
-          {archetype.idealFriend}
-        </InsightCard>
-      </div>
-
-      <ExposeMe text={archetype.exposeMe(scores)} />
-
-      <div>
-        <p className="mb-5 text-center font-serif text-2xl text-brown">Share your You Core</p>
-        <ShareCard archetype={archetype} scores={scores} />
-      </div>
-
-      <footer className="pt-2 text-center text-xs text-brown-soft/70">
-        Not a licensed psychologist. Just very observant.
-      </footer>
     </main>
   );
 }
