@@ -25,11 +25,3 @@ export function pickArchetype(scores: TraitScores): Archetype {
 
   return best;
 }
-
-/** Similarity between two trait profiles, 0–100. Used for "compare" compatibility. */
-export function compatibility(a: TraitScores, b: TraitScores): number {
-  const traits = Object.keys(a) as TraitId[];
-  const totalDiff = traits.reduce((sum, t) => sum + Math.abs(a[t] - b[t]), 0);
-  const maxDiff = traits.length * 100;
-  return Math.round(100 - (totalDiff / maxDiff) * 100);
-}

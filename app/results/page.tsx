@@ -9,7 +9,6 @@ import { TraitList } from "@/components/results/TraitList";
 import { InsightCard } from "@/components/results/InsightCard";
 import { ExposeMe } from "@/components/results/ExposeMe";
 import { ShareCard } from "@/components/results/ShareCard";
-import { CompareCTA } from "@/components/results/CompareCTA";
 import { loadResult, type StoredResult } from "@/lib/storage";
 import { getArchetype } from "@/data/archetypes";
 
@@ -87,8 +86,6 @@ export default function ResultsPage() {
         <p className="mb-5 text-center font-serif text-2xl text-brown">Share your You Core</p>
         <ShareCard archetype={archetype} scores={scores} shareUrl={shareUrl} />
       </div>
-
-      <CompareCTA />
 
       <footer className="pt-2 text-center text-xs text-brown-soft/70">
         Not a licensed psychologist. Just very observant.
