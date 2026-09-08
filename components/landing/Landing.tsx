@@ -90,7 +90,7 @@ export function Landing() {
           <FloatingChip className="-right-4 top-10 text-lg" delay={1.1} reverse>
             ✨
           </FloatingChip>
-          <FloatingChip className="-bottom-6 left-1 text-xs font-medium text-brown" delay={1.3}>
+          <FloatingChip className="-bottom-12 left-1 text-xs font-medium text-brown" delay={1.3} reverse>
             “this is scarily accurate”
           </FloatingChip>
 
