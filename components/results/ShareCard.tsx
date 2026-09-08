@@ -74,7 +74,7 @@ export function ShareCard({ archetype, scores }: { archetype: Archetype; scores:
       <div className="mx-auto max-w-[260px] shadow-[0_24px_50px_-16px_rgba(51,42,39,0.35)] sm:max-w-[280px]">
         <div
           ref={cardRef}
-          className="aspect-[9/16] overflow-hidden rounded-[26px] bg-gradient-to-b from-blush to-offwhite p-6 ring-1 ring-brown/15"
+          className="aspect-[9/16] overflow-hidden rounded-[26px] bg-gradient-to-b from-pink to-blush p-6 ring-1 ring-brown/15"
         >
           <div className="grain flex h-full flex-col">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brown/60">You Core</p>
