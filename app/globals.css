@@ -1,26 +1,82 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-cream: #f8f3ed;
+  --color-offwhite: #fffdf9;
+  --color-blush: #f3d9d7;
+  --color-blush-deep: #ecc4c1;
+  --color-brown: #332a27;
+  --color-brown-soft: #6e6058;
+  --color-pink: #d9a6a1;
+  --color-pink-deep: #c4837d;
+  --color-lavender: #ddd6f3;
+  --color-lavender-deep: #c3b6e8;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-cream: var(--color-cream);
+  --color-offwhite: var(--color-offwhite);
+  --color-blush: var(--color-blush);
+  --color-blush-deep: var(--color-blush-deep);
+  --color-brown: var(--color-brown);
+  --color-brown-soft: var(--color-brown-soft);
+  --color-pink: var(--color-pink);
+  --color-pink-deep: var(--color-pink-deep);
+  --color-lavender: var(--color-lavender);
+  --color-lavender-deep: var(--color-lavender-deep);
+
+  --font-serif: var(--font-display);
+  --font-sans: var(--font-body);
+
+  --animate-float-slow: float 7s ease-in-out infinite;
+  --animate-float-slower: float 10s ease-in-out infinite;
+  --animate-float-reverse: float-reverse 8s ease-in-out infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(var(--tw-rotate, 0)); }
+  50% { transform: translateY(-14px) rotate(var(--tw-rotate, 0)); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: translateY(0) rotate(var(--tw-rotate, 0)); }
+  50% { transform: translateY(14px) rotate(var(--tw-rotate, 0)); }
+}
+
+html {
+  background: var(--color-cream);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-brown);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+* {
+  scrollbar-width: thin;
+}
+
+::selection {
+  background: var(--color-pink);
+  color: var(--color-offwhite);
+}
+
+.font-serif {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+/* subtle grain texture so flat colour fields never feel like a template */
+.grain {
+  position: relative;
+}
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
