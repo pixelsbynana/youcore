@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Share2, Copy, Check } from "lucide-react";
+import { Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import type { Archetype } from "@/data/archetypes";
 import type { TraitScores } from "@/data/traits";
@@ -80,14 +80,10 @@ export function ShareCard({
 
       <p className="mt-3 text-center text-xs text-brown-soft">📸 Screenshot this to post it, or share it directly</p>
 
-      <div className="mt-4 flex flex-wrap justify-center gap-3">
+      <div className="mt-4 flex justify-center">
         <Button onClick={handleShare}>
-          <Share2 size={16} strokeWidth={2.5} />
-          Share my You Core
-        </Button>
-        <Button variant="secondary" onClick={handleCopy}>
-          {copied ? <Check size={16} strokeWidth={2.5} /> : <Copy size={16} strokeWidth={2.5} />}
-          {copied ? "Copied!" : "Copy"}
+          {copied ? <Check size={16} strokeWidth={2.5} /> : <Share2 size={16} strokeWidth={2.5} />}
+          {copied ? "Copied!" : "Share my You Core"}
         </Button>
       </div>
     </div>
