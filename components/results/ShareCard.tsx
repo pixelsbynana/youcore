@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import type { Archetype } from "@/data/archetypes";
 import type { TraitScores } from "@/data/traits";
 import { rankTraits } from "@/lib/scoring";
+import { SITE_URL } from "@/lib/site";
 
 type Status = "idle" | "working" | "done";
 
@@ -39,7 +40,7 @@ export function ShareCard({ archetype, scores }: { archetype: Archetype; scores:
           await navigator.share({
             files: [file],
             title: "You Core",
-            text: `I'm ${archetype.name} ${archetype.emoji} — find your You Core`,
+            text: `I'm ${archetype.name} ${archetype.emoji} — find your You Core at ${SITE_URL}`,
           });
           setStatus("done");
         } catch (shareErr) {
@@ -95,8 +96,8 @@ export function ShareCard({ archetype, scores }: { archetype: Archetype; scores:
           </p>
 
           <div className="mt-4 border-t border-brown/10 pt-3">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-pink-deep">Take the quiz →</p>
-            <p className="text-[10px] text-brown/50">You Core</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-pink-deep">Take the quiz at</p>
+            <p className="text-[11px] font-medium text-brown/70">{SITE_URL}</p>
           </div>
         </div>
       </div>
