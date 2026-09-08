@@ -118,7 +118,7 @@ export function Landing() {
       {/* archetype strip */}
       <section className="mt-20 sm:mt-24">
         <p className="text-center text-sm text-brown-soft">There are 12 of these. Which one is yours?</p>
-        <div className="mt-4 flex gap-2.5 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
           {ARCHETYPES.map((a, i) => (
             <motion.span
               key={a.id}
@@ -126,7 +126,7 @@ export function Landing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.4, delay: (i % 6) * 0.05 }}
-              className="flex shrink-0 items-center gap-1.5 rounded-full bg-offwhite px-4 py-2 text-sm font-medium text-brown ring-1 ring-brown/10"
+              className="flex min-h-[52px] items-center justify-center gap-1.5 rounded-2xl bg-offwhite px-3 py-2.5 text-center text-sm font-medium text-brown ring-1 ring-brown/10"
             >
               <span>{a.emoji}</span>
               {a.name}
